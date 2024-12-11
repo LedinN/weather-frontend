@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import LinkComponent from "./_component/ui-elements/LinkComponent";
+import Navbar from "./_component/Navbar";  // Import Navbar component
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,17 +28,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ paddingTop: "4rem" }} // Add padding for fixed navbar
       >
-        <nav className="bg-blue-400">
-          <ul className="text-2xl p-4 flex justify-evenly">
-            <LinkComponent url="/" text="Home"></LinkComponent>
-            <LinkComponent url="/currentweather" text="Current"></LinkComponent>
-            <LinkComponent
-              url="/forecastweather"
-              text="Forecast"
-            ></LinkComponent>
-          </ul>
-        </nav>
+        <Navbar /> {/* Use the Navbar component */}
         {children}
       </body>
     </html>
