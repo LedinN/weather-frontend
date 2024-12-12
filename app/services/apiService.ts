@@ -1,8 +1,11 @@
 import { WeatherApiResponse } from "../_types/IWeatherValues";
 import { WeatherDataForecastDTO } from "../_types/IWeatherForecastValues";
-import { UserProfile} from "../_types/IUserProfile";
-import { PromoteResponse } from "../_types/IPromoteResponse";
+import { IUser } from "../_types/IUser";
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+interface PromoteResponse {
+  message: string;
+}
 
 export const apiService = {
 
@@ -25,7 +28,7 @@ export const apiService = {
         return response.text();
       },
 
-    async whoAmI(): Promise<UserProfile> {
+    async whoAmI(): Promise<IUser> {
         const token = localStorage.getItem("authToken");
         if (!token) {
           throw new Error("No token found. User is not authenticated.");
@@ -92,7 +95,7 @@ export const apiService = {
     return response.json();
   },
 
-  async fetchAllUsers(): Promise<UserProfile[]> {
+  async fetchAllUsers(): Promise<IUser[]> {
     const response = await fetch(`${BASE_URL}/api/user/fetchallusers`, {
       method: "GET",
       headers: {

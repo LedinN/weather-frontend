@@ -104,7 +104,7 @@ export default function AdminPage() {
     return (
       <tr key={userWithId.id} className="hover:bg-gray-50">
         <td className="border-b border-r border-gray-300 p-2 text-sm">{userWithId.username}</td>
-        <td className="border-b border-r border-gray-300 p-2 text-sm font-bold">{userWithId.userRole}</td>
+        <td className="border-b border-r border-gray-300 p-2 text-sm font-bold">{userWithId.role}</td>
         <td className="border-b p-2">
           <div className="flex flex-col sm:flex-row items-center sm:space-x-4 space-y-2 sm:space-y-0">
             <div className="flex items-center space-x-2">
@@ -125,7 +125,7 @@ export default function AdminPage() {
               </button>
             </div>
             <div className="flex-shrink-0">
-              {userWithId.userRole !== "ADMIN" ? (
+              {userWithId.role !== "ADMIN" ? (
                 <button
                   className="min-w-[150px] px-4 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none text-sm"
                   onClick={() => handlePromoteToAdmin(userWithId.id)}

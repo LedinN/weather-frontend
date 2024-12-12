@@ -65,7 +65,7 @@ export default function Signin() {
         <div className="mt-6 text-center">
           <p className="text-gray-600">Not registered?</p>
           <button
-            onClick={() => router.push('/register')}
+            onClick={() => router.push('/sign-up')}
             className="mt-2 px-4 py-2 text-blue-500 border border-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1"
           >
             Register Now

@@ -3,13 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import apiService from "../services/apiService";
+import { IUser } from "../_types/IUser";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<{
-    username: string;
-    role: string;
-    id: number;
-  } | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,17 +22,13 @@ export default function ProfilePage() {
     fetchUser();
   }, [router]);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await apiService.logout();
+      localStorage.removeItem("authToken");
       alert("You have been logged out.");
       router.push("/sign-in");
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert("An unexpected error occurred.");
-      }
+      alert("An unexpected error occurred during logout.");
     }
   };
 
@@ -54,8 +47,16 @@ export default function ProfilePage() {
           <strong>Role:</strong> {user.role || "Unknown"}
         </p>
         <p>
-          <strong>User ID:</strong> {user.id}
+          <strong>User ID:</strong> {user.id ?? "No ID available"}
         </p>
+        {user.role === "ADMIN" && (
+          <button
+            onClick={() => router.push("/admin")}
+            className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          >
+            Admin Panel
+          </button>
+        )}
         <button
           onClick={handleLogout}
           className="mt-6 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
