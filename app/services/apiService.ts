@@ -1,168 +1,62 @@
-import { WeatherApiResponse } from "../_types/IWeatherValues";
-import { WeatherDataForecastDTO } from "../_types/IWeatherForecastValues";
-import { IUser } from "../_types/IUser";
+import axiosInstance from "./axiosInstance";
+import { WeatherApiResponse } from "../types/IWeatherValues";
+import { WeatherDataForecastDTO } from "../types/IWeatherForecastValues";
+import { IUser } from "../types/IUser";
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-interface PromoteResponse {
-  message: string;
-}
+interface PromoteResponse { message: string; }
 
 export const apiService = {
-
     async login(username: string, password: string): Promise<string> {
         const params = new URLSearchParams();
         params.append('username', username);
         params.append('password', password);
     
-        const response = await fetch(`${BASE_URL}/api/user/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: params.toString(),
+        const response = await axiosInstance.post('/api/user/login', params.toString(), {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
-    
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || 'Failed to log in');
-        }
-    
-        return response.text();
+        return response.data;
       },
 
     async whoAmI(): Promise<IUser> {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          throw new Error("No token found. User is not authenticated.");
-        }
+        const response = await axiosInstance.get('/api/user/who-am-i')
+        return response.data;
+    },
     
-        const response = await fetch(`${BASE_URL}/api/user/who-am-i`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-    
-        if (!response.ok) {
-          const errorMessage = await response.json();
-          throw new Error(errorMessage.error || "Failed to fetch user information.");
-        }
-    
-        return response.json();
-      },
-
   async promoteToAdmin(userId: number): Promise<PromoteResponse> {
-    const response = await fetch(`${BASE_URL}/api/user/promote/${userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-    return response.json();
+    const response = await axiosInstance.put(`/api/user/promote/${userId}`)
+    return response.data;
   },
 
-  async deleteUser(userId: number): Promise<{message: string}> {
-    const response = await fetch(`${BASE_URL}/api/user/delete/${userId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-    return response.json();
+  async deleteUser(userId: number): Promise<{ message: string }> {
+    const response = await axiosInstance.delete(`/api/user/delete/${userId}`);
+    return response.data;
   },
 
-  async changePassword(userId: number, newPassword: string): Promise<{ message: string}> {
-    const response = await fetch(`${BASE_URL}/api/user/change-password/${userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      },
-      body: JSON.stringify({ newPassword }),
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-    return response.json();
+  async changePassword(userId: number, newPassword: string): Promise<{ message: string }> {
+    const response = await axiosInstance.put(`/api/user/change-password/${userId}`, { newPassword });
+    return response.data;
   },
 
   async fetchAllUsers(): Promise<IUser[]> {
-    const response = await fetch(`${BASE_URL}/api/user/fetchallusers`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
-    }
-    return response.json();
+    const response = await axiosInstance.get('/api/user/fetchallusers');
+    return response.data;
   },
 
   async logout(): Promise<void> {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      throw new Error("No token found. User is already logged out.");
-    }
-  
-    await fetch(`${BASE_URL}/api/user/logout`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  
-    localStorage.removeItem("authToken");
-  
+    await axiosInstance.post('/api/user/logout');
+    localStorage.removeItem('authToken');
     window.dispatchEvent(new StorageEvent("storage", { key: "authToken" }));
   },
   
-    async getWeather(city: string, token: string): Promise<WeatherApiResponse> {
-      const response = await fetch(`${BASE_URL}/weather/current?location=${city}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || `Error: ${response.status} ${response.statusText}`);
-      }
-  
-      return response.json();
-    },
+  async getWeather(city: string, token: string): Promise<WeatherApiResponse> {
+    const response = await axiosInstance.get(`/weather/current?location=${city}`);
+    return response.data;
+  },
 
-    async getForecast(city: string, token: string): Promise<WeatherDataForecastDTO> {
-        const response = await fetch(
-          `${BASE_URL}/weather/forecast?location=${city}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-      
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || `Error: ${response.status} ${response.statusText}`);
-        }
-      
-        return response.json();
-      },
-
-}
+  async getForecast(city: string, token: string): Promise<WeatherDataForecastDTO> {
+    const response = await axiosInstance.get(`/weather/forecast?location=${city}`);
+    return response.data;
+  }
+};
 export default apiService;

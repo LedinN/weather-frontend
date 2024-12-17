@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { apiService } from "../services/apiService";
-import { IUser } from '../_types/IUser';
+import { IUser } from '../types/IUser';
 
 export default function AdminPage() {
     const [users, setUsers] = useState<IUser[]>([]);

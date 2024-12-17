@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { WeatherApiResponse } from "../_types/IWeatherValues";
+import { WeatherApiResponse } from "../types/IWeatherValues";
 import Image from 'next/image'
 import apiService from "../services/apiService";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import LinkComponent from "./ui-elements/LinkComponent";
+import LinkComponent from "./LinkComponent";
 import { useEffect, useState } from "react";
 import apiService from "../services/apiService";
 
@@ -12,7 +12,7 @@ export default function Navbar() {
       const token = localStorage.getItem("authToken");
       if (token) {
         try {
-          await apiService.whoAmI(); // Verify token validity
+          await apiService.whoAmI();
           setIsAuthenticated(true);
         } catch {
           setIsAuthenticated(false);
@@ -25,7 +25,7 @@ export default function Navbar() {
     updateAuthState();
 
     const handleStorageChange = () => {
-      updateAuthState(); // Update authentication state when localStorage changes
+      updateAuthState();
     };
 
     window.addEventListener("storage", handleStorageChange);

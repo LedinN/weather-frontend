@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "./_component/Navbar";  // Import Navbar component
+import Navbar from "./component/Navbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,9 +28,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ paddingTop: "4rem" }} // Add padding for fixed navbar
+        style={{ paddingTop: "4rem" }}
       >
-        <Navbar /> {/* Use the Navbar component */}
+        <Navbar />
         {children}
       </body>
     </html>

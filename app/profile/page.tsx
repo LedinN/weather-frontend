@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import apiService from "../services/apiService";
-import { IUser } from "../_types/IUser";
+import { IUser } from "../types/IUser";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<IUser | null>(null);

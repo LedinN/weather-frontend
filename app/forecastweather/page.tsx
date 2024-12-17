@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   WeatherDataForecastDTO,
   WeatherForecastDay,
-} from "../_types/IWeatherForecastValues";
+} from "../types/IWeatherForecastValues";
 
 export default function ForecastWeather() {
   const [locations, setLocations] = useState<
