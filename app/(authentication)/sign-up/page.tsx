@@ -13,7 +13,7 @@ export default function Signup() {
     const payload = {
       username,
       password,
-      role: 'USER',
+      userRole: 'USER',
     };
 
     try {
